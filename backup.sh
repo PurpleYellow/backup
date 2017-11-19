@@ -23,7 +23,7 @@ fi
 
 # Archive
 BACKUP_ARCHIVED_FILE="$BACKUP_ROOT_DIR/$BACKUP_NAME.tar.gz"
-tar czf "$BACKUP_ARCHIVED_FILE" $HOMEDIR/.ssh $HOMEDIR/Documents $HOMEDIR/bin $HOMEDIR/Desktop $HOMEDIR/.local/share/gnote
+tar czf "$BACKUP_ARCHIVED_FILE" $HOMEDIR/Documents $HOMEDIR/Desktop # ADD MORE HERE
 
 # Encrypt the archive
 if ! [ -x "$(command -v gpg)" ]; then
