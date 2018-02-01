@@ -26,10 +26,10 @@ BACKUP_ARCHIVED_FILE="$BACKUP_ROOT_DIR/$BACKUP_NAME.tar.gz"
 tar czf "$BACKUP_ARCHIVED_FILE" $HOMEDIR/Documents $HOMEDIR/Desktop # ADD MORE HERE
 
 # Encrypt the archive
-if ! [ -x "$(command -v gpg)" ]; then
-    echo "Warning: not encrypting file because gpg is not installed."
+if ! [ -x "$(command -v gpg2)" ]; then
+    echo "Warning: not encrypting file because gnupg2 is not installed."
 else
-    gpg --symmetric --cipher-algo AES256 --passphrase $(cat "$PWD_PATH") "$BACKUP_ARCHIVED_FILE" 
+    gpg2 --symmetric --cipher-algo AES256 --passphrase $(cat "$PWD_PATH") --batch --yes --no-tty "$BACKUP_ARCHIVED_FILE" 
 fi
 
 # Delete old files
