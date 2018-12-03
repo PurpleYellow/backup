@@ -1,7 +1,11 @@
 #!/bin/bash
+if ! [ -x "$(command -v gpg2)" ]; then
+    echo "Fatal: not encrypting file because gnupg2 is not installed."
+    exit 1
+fi
 
 HOMEDIR=/home/arnoldas
-BACKUP_NAME=backup-$(date -u +"%Y-%m-%d-%H-%M-%S-%Z")
+BACKUP_NAME=backup-$(date -u +"%Y-%m-%d-%H-%M-%S")
 
 # Ensure the passphrase file is set up
 PWD_PATH=$HOMEDIR/.backup_password
@@ -23,14 +27,10 @@ fi
 
 # Archive
 BACKUP_ARCHIVED_FILE="$BACKUP_ROOT_DIR/$BACKUP_NAME.tar.gz"
-tar czf "$BACKUP_ARCHIVED_FILE" $HOMEDIR/Documents $HOMEDIR/Desktop # ADD MORE HERE
+tar czf "$BACKUP_ARCHIVED_FILE" $HOMEDIR/.ssh $HOMEDIR/Documents $HOMEDIR/bin $HOMEDIR/phpstorm-settings.jar $HOMEDIR/eclipse-workspace
 
 # Encrypt the archive
-if ! [ -x "$(command -v gpg2)" ]; then
-    echo "Warning: not encrypting file because gnupg2 is not installed."
-else
-    gpg2 --symmetric --cipher-algo AES256 --passphrase $(cat "$PWD_PATH") --batch --yes --no-tty "$BACKUP_ARCHIVED_FILE" 
-fi
+gpg2 --symmetric --cipher-algo AES256 --passphrase $(cat "$PWD_PATH") --batch --yes --no-tty "$BACKUP_ARCHIVED_FILE" 
 
 # Delete old files
 if ! [ -x "$(command -v srm)" ]; then
